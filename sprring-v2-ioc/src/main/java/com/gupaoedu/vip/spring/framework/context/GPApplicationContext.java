@@ -77,6 +77,9 @@ public class GPApplicationContext implements GPBeanFactory {
 
     //实例化对象
     private Object instantiateBean(String beanName, GPBeanDefinition beanDefinition) {
+        if(beanDefinition.isSingleton() && this.factoryBeanObjectCache.containsKey(beanName)){
+            return this.factoryBeanObjectCache.get(beanName);
+        }
         String className = beanDefinition.getBeanClassName();
         Object instance = null;
         try {
@@ -84,6 +87,10 @@ public class GPApplicationContext implements GPBeanFactory {
             instance = clazz.newInstance();
             //如果是代理对象,触发AOP的逻辑
             this.factoryBeanObjectCache.put(beanName,instance);
+            this.factoryBeanObjectCache.put(clazz.getName(),instance);
+            for (Class<?> i : clazz.getInterfaces()) {
+                this.factoryBeanObjectCache.put(i.getName(),instance);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
