@@ -10,6 +10,7 @@
   <modules>
     <module>spring-1.0</module>
     <module>sprring-v2-ioc</module>
+      <module>spring-v2-circular-dependency</module>
   </modules>
   <packaging>pom</packaging>
 
